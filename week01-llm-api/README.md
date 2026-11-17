@@ -32,6 +32,7 @@ python 02_stream_chat.py
 python 03_tokens_ko_en.py
 python 04_cost_calc.py --compare --price claude-opus-5-5   # 로컬 모델 토큰을 유료 단가로 어림
 python 05_retry.py                                          # 키·인터넷 필요 없음
+python 06_tokens_offline.py                                 # 키 없이 한국어/영어 토큰 세기 (pip install tiktoken)
 ```
 
 - 주차 코드는 저장소 루트의 `llm/` 공통 인터페이스(`chat`, `stream`, `count_tokens`)만 불러요. 어느 회사 모델인지 몰라도 돼요.
