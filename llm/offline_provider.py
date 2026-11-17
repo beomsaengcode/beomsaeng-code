@@ -22,10 +22,12 @@ class OfflineProvider(Provider):
         turns = data["turns"]
         t = single or turns[min(self.turn, len(turns) - 1)]
         self.turn += 1
+        # 여러 턴 대화는 보낸 글자 수로 입력 토큰을 어림한다(한글 약 2자 = 1토큰, 예시 값)
+        est = 8 + sum(len(m["content"]) for m in messages) // 2 + (len(system) // 2 if system else 0)
         return Reply(
             t["assistant"],
             "end",
-            t["input_tokens"],
+            t["input_tokens"] if single else est,
             t["output_tokens"],
             self.name,
             self.model,

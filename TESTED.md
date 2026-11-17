@@ -8,4 +8,6 @@
 | 2026-11-10 | openai · gpt-5-mini | ✅ | ✅ | ✅ |
 | 2026-11-10 | ollama · qwen2.5:1.5b | ✅ | ✅ | ✅ |
 | 2026-11-10 | 코드 정렬(ruff) 뒤 offline · ollama 다시 실행 | ✅ | ✅ | ✅ (offline) |
+| 2026-11-15 | offline · ollama qwen2.5:1.5b: 01~04 다시 실행, 04 계산기(--compare --price) 새로 | ✅ | ✅ | ✅ (04 ✅) |
+| 2026-11-15 | 05 재시도: 로컬 가짜 서버 (429×3, retry-after, 401, 529 상한) | | | 05 ✅ |
 | 대기 | claude · claude-opus-5-5 | 키 받으면 테스트 | | |
