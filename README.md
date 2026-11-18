@@ -1,4 +1,4 @@
-# bumsaeng-code
+# beomsaeng-code
 
 [범생코드](https://beomsaengcode.github.io) 영상에 나온 코드를 직접 돌려 보는 저장소입니다.
 매주 AI 주제 하나와 개발 기초 하나를 구조도로 보고, 여기서 실행하고, 실습으로 손에 익힙니다.
@@ -23,8 +23,8 @@
 ## 시작
 
 ```bash
-git clone https://github.com/beomsaengcode/bumsaeng-code
-cd bumsaeng-code
+git clone https://github.com/beomsaengcode/beomsaeng-code
+cd beomsaeng-code
 pip install -r requirements.txt
 python week01-llm-api/01_first_request.py "HTTP 403이랑 404 차이를 한 줄로"
 ```

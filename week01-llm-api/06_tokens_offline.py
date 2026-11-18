@@ -3,8 +3,12 @@
 실행: pip install tiktoken → python 06_tokens_offline.py
 - OpenAI가 공개한 토크나이저(tiktoken)로 세기만 해요. 모델을 부르지 않아서 비용이 0이에요.
 - o200k_base = GPT-4o·GPT-5 계열, cl100k_base = 예전 GPT-4·3.5. Claude 토크나이저는 공개돼 있지 않아요(03은 count_tokens API로 셈).
-- 영상: 범생코드 쇼츠 "한국어로 물으면 돈을 더 낸다?"
+- 영상: 범생코드 쇼츠 "AI 챗봇 1년, 10억 → 8,400만"
+- 2부: fixtures/cs_prompt_ko.txt · cs_prompt_en.txt (같은 내용의 쇼핑몰 상담 지시문 전체)로
+  하루 100만 건일 때 1년 지시문 비용을 캐시 없음/있음으로 계산해요.
 """
+
+from pathlib import Path
 
 import tiktoken
 
@@ -38,6 +42,9 @@ Q = [
 ]
 
 GPT5_MINI_INPUT = 0.25  # 달러 / 100만 토큰, OpenAI 공식 가격표 2026-11-10 확인 (llm/prices.py)
+GPT5_INPUT, GPT5_CACHED = 1.25, 0.125  # 달러 / 100만 토큰, OpenAI 공식 가격표 2026-11-18 확인
+KRW_PER_USD = 1340  # 2026-11-11 종가 1,337.5원을 반올림
+FIX = Path(__file__).parent / "fixtures"
 
 
 def main():
@@ -61,6 +68,26 @@ def main():
     print(
         f"하루 1만 건 요청에 시스템 프롬프트가 붙으면: 차이 {diff}토큰 × 30일 → gpt-5-mini 입력 단가로 한 달 약 ${monthly:.2f}"
     )
+    print()
+    cs_prompt_year(enc)
+
+
+def cs_prompt_year(enc):
+    """2부: 실제 크기의 상담 지시문으로, 하루 100만 건이면 1년에 지시문 값만 얼마일까 (gpt-5 기준)"""
+    ko = (FIX / "cs_prompt_ko.txt").read_text(encoding="utf-8")
+    en = (FIX / "cs_prompt_en.txt").read_text(encoding="utf-8")
+    tk, te = len(enc.encode(ko)), len(enc.encode(en))
+    print(f"[상담 지시문 전체] 한국어 {tk}토큰({len(ko)}자) | 영어 {te}토큰({len(en)}자) | {tk / te:.2f}배")
+    per_year = 1_000_000 * 365 / 1e6  # 하루 100만 건 × 365일, 100만 토큰 단위
+    for label, t, price in [
+        ("한국어, 캐시 없음", tk, GPT5_INPUT),
+        ("영어, 캐시 없음", te, GPT5_INPUT),
+        ("한국어 + 캐시", tk, GPT5_CACHED),
+        ("영어 + 캐시", te, GPT5_CACHED),
+    ]:
+        usd = t * per_year * price
+        print(f"  {label:<10} 1년 ${usd:>10,.0f} ≈ {usd * KRW_PER_USD / 1e8:5.2f}억 원")
+    print("  (캐시 줄은 매번 캐시가 맞는다고 친 값이에요. 사용자 질문과 답변 비용은 빠져 있어요.)")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 [project]
-name = "bumsaeng-code"
+name = "beomsaeng-code"
 version = "0.1.0"
 description = "범생코드 영상의 실행 코드: AI 엔지니어 10주"
 requires-python = ">=3.10"
